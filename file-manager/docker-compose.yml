@@ -1,0 +1,33 @@
+version: '3.5'
+
+services: 
+  browser:
+    image: filebrowser/filebrowser
+    ports: 
+      - 8100:80
+    volumes: 
+      - ./files:/srv
+    restart: always
+  aria2:
+    image: p3terx/aria2-pro
+    logging: 
+      options: 
+        max-size: 1m
+    environment: 
+      - PUID=${UID}
+      - PGID=${GID}
+      - RPC_SECRET=cz2021
+      - RPC_PORT=6800
+      - LISTEN_PORT=6888
+      - DISK_CACHE=512M
+      - UPDATE_TRACKERS=true
+      - CUSTOM_TRACKER_URL=https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_best.txt
+    ports: 
+      - 6800:6800
+      - 6888:6888/tcp
+      - 6888:6888/udp
+    volumes: 
+      - ./config:/config
+      - ./files:/downloads
+    restart: always
+
